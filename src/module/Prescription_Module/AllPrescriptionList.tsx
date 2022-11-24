@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Pagination, TablePagination } from '@mui/material';
 import Search from '../../CommonModule.tsx/Search';
 import { useNavigate } from "react-router-dom"
 import { PRESCRIPTION_PRINT, PRESCRITION_BY_ID } from '../../constant/InternalRoutes';
@@ -21,6 +21,9 @@ import ReactToPrint from 'react-to-print';
 import PrintIcon from '@mui/icons-material/Print';
 import { CommonResObject, ID } from '../../CommonModule.tsx/Models';
 import RemarksDialog from '../../CommonModule.tsx/RemarksDialog';
+import moment from "moment"
+import AlertMessge from '../../CommonModule.tsx/AlertMessge';
+
 function createData(
     name: string,
     calories: number,
@@ -45,29 +48,39 @@ export default function AllPrescriptionList() {
     const [prescriptionListData, setPrescriptionListData] = React.useState<any>(null)
     const [openDialogBoxConfirmations, setOpenDialogBoxConfirmations] = React.useState(false)
     const [actionBtn, setActionBtn] = React.useState("delete")
-    const [actionId,setActionId]=React.useState<ID>("")
+    const [actionId, setActionId] = React.useState<ID>("")
+    const [pageNo, setPageNo] = React.useState(2);
+    const [pageSize, setPageSize] = React.useState(10);
+    const [searchFeild, setSearchFeild] = React.useState("")
+    const [alertObj,setAlertObj]=React.useState({status:0,message:"",open:false})
     const navigate = useNavigate()
 
 
     React.useEffect(() => {
         fetchList()
-    }, [])
+    }, [searchFeild, pageNo, pageSize])
 
-const fetchList=()=>{
-    prescriptionActions.getAll().then((resItem) => {
-        console.log(resItem, "resItem")
-        if (resItem.status === 200) {
-            setPrescriptionListData(resItem.data)
-        } else {
-            alert(resItem.message)
+    const fetchList = () => {
+
+        let payload = {
+            pageNo: 1,
+            pageSize: 10,
+            searchFeild: searchFeild
         }
-    })
+        prescriptionActions.getAll(payload).then((resItem) => {
+            console.log(resItem, "resItem")
+            if (resItem.status === 200) {
+                setPrescriptionListData(resItem.data)
+            } else {
+                alert(resItem.message)
+            }
+        })
     }
     console.log(prescriptionListData, "prescriptionListData")
     const deletehandle = (id: ID) => {
         setOpenDialogBoxConfirmations(true)
-        setActionId(id )
-        
+        setActionId(id)
+
     }
 
     const fetchRemarkData = () => {
@@ -77,17 +90,26 @@ const fetchList=()=>{
         console.log(data, "data")
 
         if (data === "delete") {
-            prescriptionActions.deleteFunc(actionId).then((resItem:CommonResObject)=>{
-                if(resItem.status===200){
-                alert('succesfully deleted')
-                setOpenDialogBoxConfirmations(false)
-                fetchList()
-                }else{
-    
+            prescriptionActions.deleteFunc(actionId).then((resItem: CommonResObject) => {
+                if (resItem.status === 200) {
+                    alert('succesfully deleted')
+                    setOpenDialogBoxConfirmations(false)
+                    fetchList()
+                } else {
+
                 }
             })
         }
     }
+
+    const handleChangePage = () => {
+
+    }
+    const handleChangeRowsPerPage = () => {
+
+    }
+    console.log(prescriptionListData, "prescriptionListData")
+    console.log(searchFeild, "searchFeild")
     return (
 
         <Box sx={{ margin: "50px" }}>
@@ -103,7 +125,7 @@ const fetchList=()=>{
 
             <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
                 <SimpleTitle title='Prescription Table' size='h5' />
-                <Search handleSearch={(e: any) => console.log(e)} />
+                <Search handleSearch={(e: any) => setSearchFeild(e)} />
             </Box>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -114,6 +136,7 @@ const fetchList=()=>{
                             <TableCell align="center">Age</TableCell>
                             <TableCell align="center">Gender</TableCell>
                             <TableCell align="center">Medicine Count</TableCell>
+                            <TableCell align="center">Created At</TableCell>
                             <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -131,6 +154,7 @@ const fetchList=()=>{
                                 <TableCell align="center">{row.patiantAge}</TableCell>
                                 <TableCell align="center">{row.patiantGender}</TableCell>
                                 <TableCell align="center">{row.medicineCount}</TableCell>
+                                <TableCell align="center">{moment(row.createdAt).format('YYYY-MM-DD HH:mm')}</TableCell>
                                 <TableCell align="center"><VisibilityIcon sx={{ cursor: "pointer" }} onClick={() => navigate(PRESCRITION_BY_ID, { state: row._id })} /> <DeleteIcon sx={{ cursor: "pointer" }} onClick={() => deletehandle(row._id)} /><PrintIcon sx={{ cursor: "pointer" }} onClick={() => navigate(PRESCRIPTION_PRINT, { state: row._id })} /> </TableCell>
                             </TableRow>
                         )) : <TableRow><TableCell colSpan={6} align="center" >No Data Available</TableCell></TableRow>}
@@ -138,7 +162,12 @@ const fetchList=()=>{
                 </Table>
             </TableContainer>
 
+            <Box sx={{ marginTop: "15px", display: "flex", justifyContent: "end" }}>
+                <Pagination count={1} variant="outlined" shape="rounded" />
+            </Box>
+
             <RemarksDialog openDialog={openDialogBoxConfirmations} closeDialog={setOpenDialogBoxConfirmations} buttonData={actionBtn} fetchRemarkData={fetchRemarkData} actionFunction={remarkActionFunc} />
+            <AlertMessge status={0} message={"error"}></AlertMessge>
         </Box>
     );
 }

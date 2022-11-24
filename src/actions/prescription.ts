@@ -56,7 +56,7 @@ async function update(data:any) {
     })
 }
 
-function getAll() {
+function getAll(payload:any) {
 
 
     let endPoint = baseUrl + getAllPrescriptionApiRoute()
@@ -65,7 +65,7 @@ function getAll() {
         data: [],
         status: 0
     }
-    return allBasics.get(endPoint).then((resItems: any) => {
+    return allBasics.post(endPoint,payload).then((resItems: any) => {
         if (resItems.status === 200) {
             resObj.data = resItems.data.data
             resObj.message = "ok"

@@ -19,6 +19,7 @@ import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import PrintPre from './Print';
 import ErrorCompo from '../../CommonModule.tsx/ErrorCompo';
+import AlertMessge from '../../CommonModule.tsx/AlertMessge';
 
 let medicineSample = {
     id: "5865789",
@@ -49,6 +50,7 @@ function PrescriptionMain() {
     const [allMedicine, setAllMedicine] = useState<Array<medicineTemplate> | []>([])
     const [tempMedicine, setTempMedicine] = useState<Array<medicineTemplate> | []>([])
     const [openDialogBoxConfirmations, setOpenDialogBoxConfirmations] = useState(false)
+    const [alertObj,setAlertObj]=React.useState({status:0,message:""})
     const [actionBtn, setActionBtn] = useState("add")
     const location = useLocation()
     const navigate = useNavigate()
@@ -246,6 +248,10 @@ function PrescriptionMain() {
 
                 if (resItem.status === 200) {
                     navigate(PRESCRITION_LIST)
+                    setAlertObj({status:200,message:"success"})
+                    setTimeout(() => {
+                        setAlertObj({status:0,message:""})
+                    }, 3000);
                 } else {
                     alert(resItem.message)
                 }
@@ -341,6 +347,7 @@ function PrescriptionMain() {
             <div id="pdfGen" style={{ display: "none" }}>
                 <PrintPre name={name} age={age} gender={gender} complaints={complaints} alergyAndDiagnosis={alergyAndDiagnosis} medicine={tempMedicine || allMedicine} />
             </div>
+            <AlertMessge status={0} message={"error"}></AlertMessge>
         </div>
     )
 }
