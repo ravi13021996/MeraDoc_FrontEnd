@@ -11,36 +11,30 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## `nodemon || node index.js`
+Run This command  for backend server
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Modules
+1. Add Prescription
+2. Update Prescription
+3. Delete Prescription
+4. List Description
 
-### `npm run build`
+Mui version 5 is used for UI and UX
+Moment Liarary is used for Date Function
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+After run npm start command application will come on landing page where a image background is visible
+On upper app bar Prescription is reflecting, need to click over there to got another route with reflect the listing page of prescription table
+in the prescription table you can see all active prescription is available
+in action colum you can see three icon 1.in eye icon you can go to edit the prescription document, 2. Withe delete button you can delete the docuement after confirmation 3. With print page you can pring the data with simple formatting
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+on the top of the table  Add Prescription button is available that take you to the add page, you can enter patiant details and medicine
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+backend 
+after running nodemon or node index.js command server will start
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+swagger is used for api documentation 
+"http://localhost:5000/api-docs/" this is the link to open swagger to check api 
