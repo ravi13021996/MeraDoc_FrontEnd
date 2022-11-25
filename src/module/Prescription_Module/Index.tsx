@@ -50,7 +50,7 @@ function PrescriptionMain() {
     const [allMedicine, setAllMedicine] = useState<Array<medicineTemplate> | []>([])
     const [tempMedicine, setTempMedicine] = useState<Array<medicineTemplate> | []>([])
     const [openDialogBoxConfirmations, setOpenDialogBoxConfirmations] = useState(false)
-    const [alertObj,setAlertObj]=React.useState({status:0,message:""})
+    const [alertObj, setAlertObj] = React.useState({ status: 0, message: "" })
     const [actionBtn, setActionBtn] = useState("add")
     const location = useLocation()
     const navigate = useNavigate()
@@ -119,7 +119,7 @@ function PrescriptionMain() {
 
 
     const addMedicine = () => {
-        
+
         const uid = new ShortUniqueId({ length: 4 })
         let tempData = { ...medicineSample }
         tempData.id = uid()
@@ -215,12 +215,12 @@ function PrescriptionMain() {
                 complaints: complaints,
                 allergiesAndDiagnosis: alergyAndDiagnosis,
                 medicine: allMedicine,
-               
+
 
             }
-            if(allMedicine.length<1){
+            if (allMedicine.length < 1) {
                 alert("please add atleast 1 medicine")
-            }else{
+            } else {
                 prescriptionActions.save(payload).then((resItem: any) => {
 
                     if (resItem.status === 200) {
@@ -230,7 +230,7 @@ function PrescriptionMain() {
                     }
                 })
             }
-            
+
         }
         else {
             // if user click on other then add button 
@@ -248,9 +248,9 @@ function PrescriptionMain() {
 
                 if (resItem.status === 200) {
                     navigate(PRESCRITION_LIST)
-                    setAlertObj({status:200,message:"success"})
+                    setAlertObj({ status: 200, message: "success" })
                     setTimeout(() => {
-                        setAlertObj({status:0,message:""})
+                        setAlertObj({ status: 0, message: "" })
                     }, 3000);
                 } else {
                     alert(resItem.message)
@@ -303,7 +303,8 @@ function PrescriptionMain() {
                     </Grid>
                 </Grid>
                 <Box sx={{ marginTop: "20px" }}>
-                    <Box sx={{ display: "flex" }}> <Typography> Complaints</Typography>
+                    <Box sx={{ display: "flex" , }}>
+                        <Typography sx={{display:"flex", alignItems:"center"}}> Complaints</Typography>
                         <Tooltip title={prescriptionConst.compalaintinfo}>
                             <IconButton>
                                 <InfoIcon fontSize='small' sx={{ cursor: "pointer" }} />
@@ -315,7 +316,7 @@ function PrescriptionMain() {
                 </Box>
 
                 <Box sx={{ marginTop: "20px" }}>
-                    <Box sx={{ display: "flex" }}> <Typography> Allergies & Diagnosis</Typography>
+                    <Box sx={{display:"flex", alignItems:"center"}}> <Typography> Allergies & Diagnosis</Typography>
                         <Tooltip title={prescriptionConst.alergyAndDiagnosisInfo}>
                             <IconButton>
                                 <InfoIcon fontSize='small' sx={{ cursor: "pointer" }} />
@@ -327,7 +328,7 @@ function PrescriptionMain() {
                 </Box>
 
             </Paper>
-            <Box id="allMedicine" sx={{ display: tempMedicine.length > 0 ? "block" : "none", scrollBehavior: "smooth", overflow: "scroll", height:" 38vh" }}>
+            <Box id="allMedicine" sx={{ display: tempMedicine.length > 0 ? "block" : "none", scrollBehavior: "smooth", overflow: "scroll", height: " 38vh" }}>
                 {
                     tempMedicine?.map((resItems: medicineTemplate, index) =>
                         <MedicineCompo cusumptionType={consumptionTimeList} indiData={resItems} index={index} isFetching={isFetching} datacollectionFunction={datacollectionFunction} isLast={index === allMedicine.length - 1} setIsFetching={setIsFetching} />
